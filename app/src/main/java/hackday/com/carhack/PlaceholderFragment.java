@@ -58,21 +58,13 @@ public class PlaceholderFragment extends Fragment {
             final TextView numberOfSecs = (TextView) rootView.findViewById(R.id.txt_secs);
 
             Button add = (Button) rootView.findViewById(R.id.btn_add);
-            Button btnSecond = (Button) rootView.findViewById(R.id.btn_addsecond);
-            btnSecond.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int time = Integer.parseInt(numberOfSecs.getText().toString().split("s")[0]);
-                    numberOfSecs.setText(String.valueOf(time + 1) + "s");
-                }
-            });
+
             add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int left = seekLeft.getProgress();
                     int right = seekRight.getProgress();
                     int time = Integer.parseInt(numberOfSecs.getText().toString().split("s")[0]);
-
                     dataset.add(String.valueOf(left) + ", " + String.valueOf(right) + ", " + String.valueOf(time));
 
                 }
@@ -97,6 +89,7 @@ public class PlaceholderFragment extends Fragment {
             // specify an adapter (see also next example)
             mAdapter = new ListAdapter(dataset);
             mRecyclerView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
         }
 
         return rootView;
