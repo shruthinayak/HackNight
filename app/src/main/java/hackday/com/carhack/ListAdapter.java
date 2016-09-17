@@ -27,9 +27,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         String item = dataset.get(position);
         holder.params.setText(item);
+        holder.clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataset.remove(position);
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @Override

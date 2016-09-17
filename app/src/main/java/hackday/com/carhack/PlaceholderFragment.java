@@ -5,17 +5,23 @@ package hackday.com.carhack;
  */
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -71,7 +77,9 @@ public class PlaceholderFragment extends Fragment {
                 }
             });
 
-            Button add = (Button) rootView.findViewById(R.id.btn_add);
+            Button add = (Button)rootView.findViewById(R.id.btn_add);
+            final Switch swit = (Switch) rootView.findViewById(R.id.switch_obs);
+
 
             final TextView txtLeftProgress = (TextView) rootView.findViewById(R.id.txt_left_progress);
             final TextView txtRightProgress = (TextView) rootView.findViewById(R.id.txt_right_progress);
@@ -81,12 +89,13 @@ public class PlaceholderFragment extends Fragment {
                 public void onClick(View view) {
                     int left = Integer.parseInt(txtLeftProgress.getText().toString());
                     int right = Integer.parseInt(txtRightProgress.getText().toString());
-                    int time;
+                    float time;
                     if(numberOfSecs.getText().toString().isEmpty())
                         time = 0;
                     else
-                        time = Integer.parseInt(numberOfSecs.getText().toString().split("s")[0]);
-                    mAdapter.dataset.add(String.valueOf(left) + "," + String.valueOf(right) + "," + String.valueOf(time));
+                        time = Float.parseFloat(numberOfSecs.getText().toString().split("s")[0]);
+                    String check_obs = getObstacle(swit);
+                    mAdapter.dataset.add(String.valueOf(left) + "," + String.valueOf(right) + "," + String.valueOf(time) + "," + check_obs);
                     mAdapter.notifyDataSetChanged();
 
                 }
@@ -132,8 +141,33 @@ public class PlaceholderFragment extends Fragment {
 
                 }
             });
+            Button front_left = (Button) rootView.findViewById(R.id.btn_for_left);
+            front_left.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mAdapter.dataset.add("35,95,2.5,"+getObstacle(swit));
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
+            Button front_right = (Button) rootView.findViewById(R.id.btn_for_right);
+            front_right.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mAdapter.dataset.add("99,29,2.5,"+getObstacle(swit));
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
 
-
+            final ImageView camera = (ImageView) rootView.findViewById(R.id.img_camera_pic);
+            camera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    /*ArrayList<String> n = new ArrayList<String>();
+                    n.add("http://172.24.1.1:8080/image");
+                    new ServerAsyncTask().execute(n);*/
+                    Picasso.with(getActivity()).load("http://172.24.1.1:8080/image").into(camera);
+                }
+            });
         } else {
             rootView = inflater.inflate(R.layout.fragment_items, container, false);
             mRecyclerView = (RecyclerView) rootView.findViewById(R.id.list_tuples);
@@ -149,5 +183,14 @@ public class PlaceholderFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    @NonNull
+    private String getObstacle(Switch swit) {
+        String check_obs = "0";
+        if (swit.isChecked()) {
+            check_obs = "1";
+        }
+        return check_obs;
     }
 }
