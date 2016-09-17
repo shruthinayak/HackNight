@@ -16,11 +16,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class PlaceholderFragment extends Fragment{
+public class PlaceholderFragment extends Fragment {
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -28,6 +29,7 @@ public class PlaceholderFragment extends Fragment{
     private static final String ARG_SECTION_NUMBER = "section_number";
     private RecyclerView mRecyclerView;
     private ListAdapter mAdapter;
+    private List<String> dataset = new ArrayList<>();
 
     public PlaceholderFragment() {
     }
@@ -48,20 +50,20 @@ public class PlaceholderFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = null;
-        if(getArguments().getInt(ARG_SECTION_NUMBER) == 1){
+        if (getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
 
             rootView = inflater.inflate(R.layout.fragment_main, container, false);
             final SeekBar seekLeft = (SeekBar) rootView.findViewById(R.id.seekLeft);
             final SeekBar seekRight = (SeekBar) rootView.findViewById(R.id.seekRight);
             final TextView numberOfSecs = (TextView) rootView.findViewById(R.id.txt_secs);
 
-            Button add = (Button) rootView.findViewById(R.id.btn_go);
+            Button add = (Button) rootView.findViewById(R.id.btn_add);
             Button btnSecond = (Button) rootView.findViewById(R.id.btn_addsecond);
             btnSecond.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int time = Integer.parseInt(numberOfSecs.getText().toString().split("s")[0]);
-                    numberOfSecs.setText(String.valueOf(time+1)+"s");
+                    numberOfSecs.setText(String.valueOf(time + 1) + "s");
                 }
             });
             add.setOnClickListener(new View.OnClickListener() {
@@ -70,8 +72,9 @@ public class PlaceholderFragment extends Fragment{
                     int left = seekLeft.getProgress();
                     int right = seekRight.getProgress();
                     int time = Integer.parseInt(numberOfSecs.getText().toString().split("s")[0]);
-                    mAdapter.dataset.add(String.valueOf(left)+", "+String.valueOf(right)+", "+String.valueOf(time));
-                    mAdapter.notifyDataSetChanged();
+
+                    dataset.add(String.valueOf(left) + ", " + String.valueOf(right) + ", " + String.valueOf(time));
+
                 }
             });
             seekLeft.setMax(95);
@@ -92,7 +95,7 @@ public class PlaceholderFragment extends Fragment{
             mRecyclerView.setLayoutManager(mLayoutManager);
 
             // specify an adapter (see also next example)
-            mAdapter = new ListAdapter(new ArrayList<String>());
+            mAdapter = new ListAdapter(dataset);
             mRecyclerView.setAdapter(mAdapter);
         }
 
