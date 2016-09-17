@@ -62,23 +62,31 @@ public class PlaceholderFragment extends Fragment {
             btnGo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new ServerAsyncTask().execute("http://172.24.1.54:8080/action");
+                    ArrayList<String> s = new ArrayList<>();
+                    s.add("http://172.24.1.1:8080/action");
+                    for(String i: mAdapter.dataset){
+                        s.add(i);
+                    }
+                    new ServerAsyncTask().execute(s);
                 }
             });
 
             Button add = (Button) rootView.findViewById(R.id.btn_add);
 
+            final TextView txtLeftProgress = (TextView) rootView.findViewById(R.id.txt_left_progress);
+            final TextView txtRightProgress = (TextView) rootView.findViewById(R.id.txt_right_progress);
+
             add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int left = seekLeft.getProgress()-95;
-                    int right = seekRight.getProgress()-95;
+                    int left = Integer.parseInt(txtLeftProgress.getText().toString());
+                    int right = Integer.parseInt(txtRightProgress.getText().toString());
                     int time;
                     if(numberOfSecs.getText().toString().isEmpty())
                         time = 0;
                     else
                         time = Integer.parseInt(numberOfSecs.getText().toString().split("s")[0]);
-                    mAdapter.dataset.add(String.valueOf(left) + ", " + String.valueOf(right) + ", " + String.valueOf(time));
+                    mAdapter.dataset.add(String.valueOf(left) + "," + String.valueOf(right) + "," + String.valueOf(time));
                     mAdapter.notifyDataSetChanged();
 
                 }
@@ -86,8 +94,6 @@ public class PlaceholderFragment extends Fragment {
 
             seekLeft.setMax(190);
             seekRight.setMax(190);
-            final TextView txtLeftProgress = (TextView) rootView.findViewById(R.id.txt_left_progress);
-            final TextView txtRightProgress = (TextView) rootView.findViewById(R.id.txt_right_progress);
 
             seekLeft.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
