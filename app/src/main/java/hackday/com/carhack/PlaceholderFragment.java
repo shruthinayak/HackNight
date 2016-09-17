@@ -62,7 +62,7 @@ public class PlaceholderFragment extends Fragment {
             btnGo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new ServerAsyncTask().execute("https://172.24.1.54:8080/action");
+                    new ServerAsyncTask().execute("http://172.24.1.54:8080/action");
                 }
             });
 
